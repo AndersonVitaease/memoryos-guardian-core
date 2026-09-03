@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "typecheck:conformance": "tsc --noEmit -p tsconfig.conformance.json",
+    "test": "vitest run guardianCore",
+    "test:conformance": "vitest run filesystemAdapter githubAdapter vpsAdapter",
+    "test:all": "vitest run"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
