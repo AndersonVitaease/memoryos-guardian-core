@@ -150,6 +150,13 @@ Three of these domain proofs are publicly available:
   Stale-state-safe file changes with bounded filesystem authority and
   read-back verification.
 
+A fourth domain proof — outbound email — was later built as a blind,
+independent validation and is also publicly available:
+
+- **Email Guardian** — <https://github.com/AndersonVitaease/memoryos-email-guardian-proof>
+  Bounded outbound email execution with stale-state protection,
+  same-instance keyed duplicate suppression and evidence-based outcomes.
+
 ## Known limitations
 
 **Per-execution Core.** The Core serializes nothing across executions: no
