@@ -117,9 +117,8 @@ npm run typecheck
 
 `src/filesystemAdapter.ts`, `src/githubAdapter.ts` and `src/vpsAdapter.ts`
 plus their tests are **not part of the Core** and are excluded from the
-default `test`/`typecheck`. They import three private sibling proof
-repositories by relative path and therefore only run in a workspace that has
-them:
+default `test`/`typecheck`. They import three sibling proof repositories by
+relative path and therefore only run in a workspace that has them:
 
 ```
 ../memoryos-filesystem-guardian-proof
@@ -137,6 +136,13 @@ npm run test:all                # everything (41 tests)
 
 Without the siblings, the default `npm test` / `npm run typecheck` still pass
 — conformance is optional evidence, never a broken promise.
+
+One of these domain proofs is publicly available:
+
+- **VPS Guardian** — <https://github.com/AndersonVitaease/memoryos-vps-guardian-pro>
+  Domain proof for governed AI-agent VPS operations, including stale-state
+  protection, controlled redeploy and same-instance concurrent redeploy
+  hardening.
 
 ## Known limitations
 
