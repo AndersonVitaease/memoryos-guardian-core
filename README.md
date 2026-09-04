@@ -137,12 +137,15 @@ npm run test:all                # everything (41 tests)
 Without the siblings, the default `npm test` / `npm run typecheck` still pass
 — conformance is optional evidence, never a broken promise.
 
-One of these domain proofs is publicly available:
+Two of these domain proofs are publicly available:
 
 - **VPS Guardian** — <https://github.com/AndersonVitaease/memoryos-vps-guardian-pro>
   Domain proof for governed AI-agent VPS operations, including stale-state
   protection, controlled redeploy and same-instance concurrent redeploy
   hardening.
+- **GitHub Guardian** — <https://github.com/AndersonVitaease/memoryos-github-guardian-proof>
+  State-bound PR merge execution using GitHub's native SHA precondition and
+  independent post-merge verification.
 
 ## Known limitations
 
