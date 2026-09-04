@@ -22,7 +22,7 @@ executeGuardianIntent(intent, adapter)
   → GuardianResult
 ```
 
-## The five frozen invariants
+## Five candidate invariants (supported across tested domains)
 
 1. **NON-EXPANDABLE AUTHORITY** — the public surface receives only `(intent,
    adapter)`. No credentials, tokens, URLs, roots, shell, HTTP methods,
@@ -34,6 +34,10 @@ executeGuardianIntent(intent, adapter)
    decision is bound to. By adapter contract, `apply` must re-prove it within
    the controlled operation and refuse with zero mutation on mismatch. How a
    domain re-proves state is a domain primitive (CAS, fingerprint, reconcile).
+   State-bound execution by itself does **not** imply cross-execution
+   atomicity: two simultaneously compatible decisions can still collide unless
+   the domain provides an atomic primitive (CAS, native precondition,
+   transaction, lock/lease, idempotency or serialization).
 4. **INTENT-CONFINED CONTROLLED EFFECTS** — `adapter.apply` is the only
    potentially mutating boundary; no machinery flows from the caller.
 5. **EPISTEMIC HONESTY WITH INDETERMINACY** — the Core never invents, promotes
@@ -57,6 +61,18 @@ executeGuardianIntent(intent, adapter)
 UNDETERMINED }` separates a clean refusal from an attempt whose outcome is
 unknown. `dispatched` means only that the potentially mutating boundary was
 reached — not that any effect occurred.
+
+Exact semantics:
+
+- `dispatched=false` → `adapter.apply` was **never invoked** by the Core.
+- `dispatched=true + NONE_PROVEN` → `apply` was reached, but the adapter
+  **proved no effect occurred** (e.g. a refusal inside `apply` before the
+  internal domain mutation). `NOT_EXECUTED/COMPATIBILITY
+  { dispatched: true, state: NONE_PROVEN }` is a correct, test-pinned shape
+  for exactly that case.
+- `dispatched=true + OCCURRED` → effect occurrence established by evidence.
+- `dispatched=true + UNDETERMINED` → effect occurrence cannot be established
+  honestly (machinery failure or unprovable outcome).
 
 ## Trust boundary (read this honestly)
 
@@ -121,6 +137,42 @@ npm run test:all                # everything (41 tests)
 
 Without the siblings, the default `npm test` / `npm run typecheck` still pass
 — conformance is optional evidence, never a broken promise.
+
+## Known limitations
+
+**Per-execution Core.** The Core serializes nothing across executions: no
+cross-execution serialization, no distributed locking, no cross-process or
+cross-machine coordination, and no exactly-once execution.
+
+**State-bound execution ≠ cross-execution atomicity.** It protects decisions
+only when the domain can revalidate and prove incompatibility. Two
+simultaneously compatible decisions can still collide unless the domain
+supplies an atomic primitive (CAS, native precondition, transaction,
+lock/lease, idempotency or serialization).
+
+**Domain primitives decide concurrency strength.** Observed across the
+conformance domains: GitHub — native SHA precondition; Filesystem —
+same-descriptor state validation + controlled write path; Email and VPS —
+same-instance keyed reservation (+ fresh evidence/fingerprint for VPS). This
+is evidence, not a universal claim.
+
+**Validated domains remain PARTIAL on concurrency beyond same-instance
+protection:**
+
+- `EMAIL_STATE_BOUND=PARTIAL` — GC-07R proved that two simultaneous decisions
+  for the same `messageId` could duplicate dispatch; GC-08A added
+  same-instance/same-`messageId` protection. Not provided: cross-process or
+  cross-machine protection, exactly-once, provider-native idempotency,
+  crash/restart durability. Known deviation: the email proof's concurrent
+  loser reports `dispatched=false` from inside `apply` — a known
+  adapter-level under-reporting relative to the Core contract above, with no
+  mutation-integrity impact; intentionally left as-is in this release.
+- `VPS_STATE_BOUND=PARTIAL` — GC-08B proved the simultaneous compatible
+  redeploy collision (duplicate dispatch reproduced; backend distinct-effect
+  semantics depended on coalescing/visibility); GC-08C added
+  same-instance/same-`applicationId` protection. Not provided:
+  cross-process/cross-machine serialization, distributed lock, exactly-once,
+  backend idempotency. `NO_DEPLOYMENT_IN_FLIGHT` remains evidence-dependent.
 
 ## Scope
 
