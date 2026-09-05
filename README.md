@@ -1,13 +1,38 @@
 # Guardian Core
 
+**Give AI agents capabilities. Not unrestricted authority.**
+
 > **EXPERIMENTAL** — research code, not production software.
 
 **Guardian Core is an experimental domain-agnostic Safe Execution Core that separates intent from controlled effects through state-bound execution and evidence-based outcomes.**
 
-It was validated horizontally against three independently developed execution
-domains (Filesystem, GitHub, VPS/Dokploy). It is **not** formally verified,
-**not** proven universal, and **not** secure against malicious or incorrect
-adapters.
+## The problem and the proposal
+
+Today, an AI agent that calls a tool can reach a real system with a
+potentially unrestricted effect:
+
+```
+Agent → Tool → potentially unrestricted effect
+```
+
+Guardian is an experimental execution layer that sits between AI agents and
+real systems: the agent declares a data-only intent, the Guardian executes it
+against the real system in a controlled way, and the outcome is returned as
+evidence of what actually happened.
+
+```
+Agent → Guardian → controlled effect + evidence
+```
+
+## Four domains — experiments, not a universal proof
+
+The pattern has been exercised in four domains — **Filesystem**, **GitHub**,
+**VPS/Dokploy** and **Email**. Three of them (Filesystem, GitHub,
+VPS/Dokploy) are the Core's three conformance adapters; Email is a fourth,
+later, independent validation. These are four experiments, each a domain
+proof — together they are **not** a universal proof and do **not** claim the
+pattern works everywhere. The Core is **not** formally verified, **not**
+proven universal, and **not** secure against malicious or incorrect adapters.
 
 ## What it is
 
@@ -90,7 +115,7 @@ The Core contains no policy engine, approval engine, registry, persistence,
 retry/rollback framework, CAS, fingerprint or domain knowledge. Human approval
 is external policy: adapters consume only externally authorized operations.
 
-## Horizontal validation (three independent domains)
+## Horizontal validation — three conformance adapters (Filesystem, GitHub, VPS/Dokploy)
 
 | Domain        | bind                          | apply                                                     | state re-proof                          |
 | ------------- | ----------------------------- | --------------------------------------------------------- | --------------------------------------- |
@@ -101,7 +126,9 @@ is external policy: adapters consume only externally authorized operations.
 Each conformance adapter is a thin, read-only import of a separately
 certified, frozen domain proof; no domain security logic was duplicated into
 the adapters and none leaked into the Core. Three domains is evidence of
-portability of the pattern — **not** proof of universality.
+portability of the pattern — **not** proof of universality. A fourth
+independent validation (Email) followed later, outside this Core's
+conformance suite — see the Email Guardian proof below.
 
 ## Commands
 
