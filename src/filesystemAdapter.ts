@@ -1,7 +1,7 @@
 /**
  * GC-02 — Filesystem conformance adapter (thin mapping, no security logic duplicated).
  * Translates the Guardian Core contract onto the certified FS-00 mechanism:
- * C:\Users\Micro\memoryos-filesystem-guardian-proof\src\safeFileChange.ts (read-only import;
+ * memoryos-filesystem-guardian-proof/src/safeFileChange.ts (read-only import;
  * that repo is frozen evidence and is not modified).
  *
  * Authority stays with the domain: AUTHORIZED_ROOT is the FS-00 module's own internal

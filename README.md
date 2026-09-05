@@ -226,3 +226,9 @@ protection:**
 `Occurrence`, `DomainAdapter<I, B>` and `executeGuardianIntent` — nothing
 else. The Core performs no I/O, persists nothing, retries nothing, and knows
 no domain.
+
+## License status
+
+This repository is publicly available for evaluation and technical review.
+No open-source license is currently granted; all rights are reserved by the
+author. Public visibility does not grant redistribution or reuse rights.
