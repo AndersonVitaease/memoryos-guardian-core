@@ -1,5 +1,7 @@
 # Guardian Core
 
+![Guardian Core](assets/guardian-logo.png)
+
 **Give AI agents capabilities. Not unrestricted authority.**
 
 > **EXPERIMENTAL** — research code, not production software.
