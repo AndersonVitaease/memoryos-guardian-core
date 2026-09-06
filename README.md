@@ -1,6 +1,6 @@
 # Guardian Core
 
-<img src="assets/guardian-logo.png" alt="MemoryOS Guardian — Checkpoint Arrow" width="420">
+![Guardian Core](assets/guardian-logo.png)
 
 **Give AI agents capabilities. Not unrestricted authority.**
 
